@@ -1,0 +1,30 @@
+service: ebook-convert
+frameworkVersion: ">=1.34.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: java8
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
+package:
+  artifact: target/calibre-1.0.0.jar 
+
+functions:
+  epub2mobi:
+    handler: com.nosoft.lambdas.EpubToMobiHandler
+    events:
+      - sns: EpubToMobiHandler 
+    layers:
+      - {Ref: CalibreLambdaLayer}
+
+layers:
+  calibre:
+    path: layer
+
+custom:
+  bucket: ${env:BUCKET, 'calibre-layer-ebook-convert'}
