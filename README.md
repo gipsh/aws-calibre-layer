@@ -1,5 +1,5 @@
 # aws-calibre-layer
-calibre layer for ebook format conversion as a service 
+aws lambda calibre layer for ebook format conversion as a service 
 using `ebook-convert` on the cloud
 
 ## build 
