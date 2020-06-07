@@ -1,11 +1,17 @@
 #!/bin/bash
-CALIBRE_VERSION=calibre-4.15.0-x86_64.txz
 mkdir -p layer
 cd layer
 rm -rf *
-wget https://github.com/kovidgoyal/calibre/releases/download/v4.15.0/$CALIBRE_VERSION
-tar -xf $CALIBRE_VERSION 
-rm $CALIBRE_VERSION
+
+# will download the lastest release
+curl -s https://api.github.com/repos/kovidgoyal/calibre/releases/latest \
+| grep "browser_download_url.*64.txz" \
+| cut -d : -f 2,3 \
+| tr -d \" \
+| wget -qi -
+
+tar -xf calibre-*.txz
+rm calibre-*.txz
 
 # remove some files to hit the 250MB layer limit 
 rm lib/libQt5WebEngineCore.so.5
